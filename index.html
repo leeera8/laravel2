@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<link rel="stylesheet" href="style.css">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	
+</head>
+<body>
+ <nav>
+    <div class="nav-wrapper #0288d1 light-blue darken-2">
+      <a href="#" class="brand-logo center"></a>
+    </div>
+  </nav>
+<div id="signUp" style="display: none;">
+	<form action="" method="post">
+		<div class="row">
+			
+			<div class="input-field div_my col s11">
+          		<input type="text" name="login" class="validate" id="reg_log">
+          		<label for="reg_log">логин</label>
+        	</div>
+        	<div class="input-field col s11">
+          		<input type="password" name="login" class="validate" id="reg_pas">
+          		<label for="reg_pas">пароль</label>
+        	</div>
+        	<div class="input-field col s11">
+          		<input type="text" name="mail" class="validate" id="reg_mail">
+          		<label for="reg_mail">mail</label>
+        	</div>
+			<a class="waves-effect waves-light btn btn_my" type="submit">Зарегистрироваться</a>
+			<div class="ak_div">
+				<a class="ak">у меня уже есть аккаунт</a>
+			</div>
+			
+		</div>
+	</form>
+</div>
+<div id="signin" style="display: none;">
+	<form action="">
+	<a class="back_a">назад</a>	
+			<div class="input-field div_my col s11">
+          		<input type="text" name="login" class="validate" id="avt_log">
+          		<label for="avt_log">логин</label>
+        	</div>
+        	<div class="input-field col s11">
+          		<input type="password" name="login" class="validate" id="avt_pas">
+          		<label for="avt_pas">пароль</label>
+        	</div>
+		<a class="waves-effect waves-light btn btn_avt_my" type="submit">войти</a>
+	</form>
+</div>
+<div id="choicee" style="display: none;">
+	<form action="">
+		<a class="waves-effect waves-light btn btn_choice btn_vol" type="submit">Я волонтер</a>
+		<a class="waves-effect waves-light btn btn_choice btn_nuzh" type="submit">Я нуждающийся в помощи</a>
+	</form>
+</div>
+<div id="vol_reg" style="display: none;">
+	<form action="">
+		<a class="back_a1">назад</a>	
+			<div class="input-field div_my col s11">
+          		<input type="text" name="login" class="validate" id="vol_fio">
+          		<label for="vol_fio">фио</label>
+        	</div>
+        	<div class="input-field col s11">
+          		<input type="password" name="login" class="validate" id="vol_pass">
+          		<label for="vol_pass">паспортные данные</label>
+        	</div>
+        	<div class="input-field col s11">
+          		<input type="text" name="mail" class="validate" id="vol_tell">
+          		<label for="vol_tell">телефон</label>
+        	</div>
+		<a href="" class="waves-effect waves-light btn btn_vol_reg" type="submit">Готово</a>			
+		
+	</form>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<script>
+	var btn_reg=document.querySelector('.btn_my');
+	var btn_avt=document.querySelector('.btn_avt_my');
+	var btn_vol=document.querySelector('.btn_vol');
+	var btn_vol_reg=document.querySelector('.btn_vol_reg');
+	var ak=document.querySelector('.ak');
+	var back_a=document.querySelector('.back_a');
+	var back_a1=document.querySelector('.back_a1');
+	
+	ak.onclick=function(){
+		$('#signin').show();
+		$('#signUp').hide();
+	}
+	back_a.onclick=function(){
+		$('#signin').hide();
+		$('#signUp').show();
+	}
+	back_a1.onclick=function(){
+		$('#nuzh_reg').hide();
+		$('#vol_reg').hide();
+		$('#choicee').show();
+	}
+	btn_reg.onclick=function(){		
+		var reg_login=document.getElementById("reg_log").value;
+		var reg_pas=document.getElementById("reg_pas").value;
+		var reg_mail=document.getElementById("reg_mail").value;
+		console.log(reg_login);
+		if(reg_login=="" || reg_mail=="" || reg_pas==""){
+			alert("вы заполнили не все данные");
+		}else{
+			$.ajax({
+				
+				url: "http://127.0.0.1:8000/reg",
+				data:{
+					login:reg_login,
+					password:reg_pas,
+					mmail:reg_mail,
+				},
+				success: function(data) {
+					console.log(data);
+					localStorage.setItem('user_id', data);
+					}
+				}
+			)
+			$('#signUp').hide();
+			$('#choicee').show();
+		}
+		
+	}
+	btn_vol.onclick=function(){
+		$('#choicee').hide();
+		$('#vol_reg').show();
+	}
+	btn_avt.onclick=function(){		
+		var avt_login=document.getElementById("avt_log").value;
+		var avt_pas=document.getElementById("avt_pas").value;
+		console.log(avt_login);
+		if(avt_login=="" || avt_pas==""){
+			alert("вы заполнили не все данные");
+		}else{
+			$.ajax({
+				
+				url: "http://127.0.0.1:8000/avt",
+				data:{
+					login:avt_login,
+					password:avt_pas,
+				},
+				success: function(data) {
+					localStorage.setItem('user_id', data.id);
+					var user_id=data.id;
+					}
+				}
+			)
+		}
+		
+	}	
+	btn_vol_reg.onclick=function(){
+		var vol_fio=document.getElementById("vol_fio").value;
+		var vol_pas=document.getElementById("vol_pas").value;
+		var vol_tell=document.getElementById("vol_tell").value;
+		console.log(vol_tell);
+		if(vol_fio=="" || vol_pas=="" || vol_tell==""){
+			alert("вы заполнили не все данные");
+		}else{
+			$.ajax({
+				url: "http://127.0.0.1:8000/regisvol",
+				data:{
+					userid: user_id,
+					fio:vol_fio,
+					passport:vol_pas,
+					number:vol_tell,
+				},
+				success: function(data) {
+					alert(1)
+					}
+				}
+			)
+			$('#signUp').hide();
+			$('#choicee').show();
+		}
+		
+	}
+	$(document).ready(function() {	
+		if(localStorage.hasOwnProperty('user_id')==false){
+			$('#signUp').show();
+		}else if($('#signUp').show()){
+			$.ajax({
+				url: "http://127.0.0.1:8000/ajax",
+				data:'				',
+				success: function(data) {
+					
+					}
+				}
+			)};
+		});
+</script>
+</body>
+</html>
